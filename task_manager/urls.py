@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
+from tasks.views import UserRegistrationView
+
 
 def api_root(request):
     return JsonResponse({"message": "Welcome to the Task Manager API"})
@@ -25,4 +27,6 @@ urlpatterns = [
     path('', api_root),  # Add a response for the root URL
     path('admin/', admin.site.urls),
     path('api/tasks/', include('tasks.urls')),  # Placeholder for tasks app routes
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),  # Include OAuth2 provider routes
+    path('register/', UserRegistrationView.as_view(), name='user-registration'),  # Registration endpoint
 ]
