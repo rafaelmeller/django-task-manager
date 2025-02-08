@@ -13,7 +13,8 @@ class Task(models.Model):
         ('Pending', 'Pending'),
         ('Completed', 'Completed'),
     ]
-    
+ 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)  # Assuming user with ID 1 exists
     title = models.CharField(max_length=200)  # Short title for the task
     description = models.TextField(blank=True, null=True)  # Optional longer description
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Low')  # Priority of the task

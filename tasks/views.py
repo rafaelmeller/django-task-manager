@@ -28,6 +28,14 @@ class TaskRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         # Return tasks that belong to the authenticated user
         return Task.objects.filter(user=self.request.user)
+    
+    def perform_update(self, serializer):
+        serializer.save()
+        return Response({"message": "Task updated successfully"}, status=status.HTTP_200_OK)
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        return Response({"message": "Task deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 class UserRegistrationView(generics.CreateAPIView):
     permission_classes = [AllowAny]
@@ -36,6 +44,8 @@ class UserRegistrationView(generics.CreateAPIView):
         username = request.data.get('username')
         password = request.data.get('password')
         if username and password:
+            if User.objects.filter(username=username).exists():
+                return Response({"error": "Username already exists"}, status=status.HTTP_400_BAD_REQUEST)
             user = User.objects.create_user(username=username, password=password)
             return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
         return Response({"error": "Username and password are required"}, status=status.HTTP_400_BAD_REQUEST)
