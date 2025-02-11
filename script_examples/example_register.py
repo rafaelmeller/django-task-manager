@@ -1,6 +1,6 @@
 from helper_functions import register_user, obtain_token, get_tasks
 
-USERNAME = 'newuser3'
+USERNAME = 'newuser4'
 PASSWORD = 'password123'
 
 def main():
