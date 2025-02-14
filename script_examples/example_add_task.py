@@ -19,7 +19,8 @@ def main():
     }
 
     # Create new task
-    post_task(access_token, data_dict)
+    if access_token:
+        post_task(access_token, data_dict)
    
     # Get the tasks
     if access_token:

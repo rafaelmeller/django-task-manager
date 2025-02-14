@@ -5,4 +5,7 @@ env/
 venv/
 .DS_Store
 README-notes.md
+README-template.md
+backend.md
 .env
+/script_examples/example.py
