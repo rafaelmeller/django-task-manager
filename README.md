@@ -1,8 +1,14 @@
-# Task Manager API
+<h1 align="center" style="font-weight: bold;">Task Manager API</h1>
 
-**IMPORTANT: THIS README IS STILL BEING DEVELOPED AND MAY CONTAIN INCOMPLETE OR INACCURATE INFORMATION.**
+<h4 align="center"> IMPORTANT: This README is still being developed and may contain incomplete or inaccurate information.</h4>
 
-TODO: ADD BADGES
+<div align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge" alt="Python Badge">
+  <img src="https://img.shields.io/badge/Django-092E20?logo=django&logoColor=white&style=for-the-badge" alt="Django Badge">
+  
+</div>
+
+#
 
 _Other versions:_
 [_Clique aqui para Português_](./translations/README-ptBR.md) - TODO
@@ -12,14 +18,14 @@ _Other versions:_
 </h4>
 
 <p align="center">
- <a href="#about">About</a> •
- <a href="#features">Features</a> •
- <a href="#demonstration">Demonstration</a> •
- <a href="#architecture">Application Architecture</a> •
- <a href="#api-endpoints">API Endpoints</a> •
- <a href="#setup">Setup</a>  • 
- <a href="#author">Author</a> • 
- <a href="#license">License</a>
+ <a href="#about-ℹ️">About</a> •
+ <a href="#features-💻">Features</a> •
+ <a href="#project-demonstration-🖥️">Demonstration</a> •
+ <a href="#application-architecture-🏗️">Application Architecture</a> •
+ <a href="#api-endpoints-📍">API Endpoints</a> •
+ <a href="#setup-⚙️">Setup</a>  • 
+ <a href="#author-👨🏻‍💻">Author</a> • 
+ <a href="#license-📝">License</a>
 </p>
 
 ## About ℹ️
@@ -28,9 +34,8 @@ The Task Manager API is a Django-based application designed to help users manage
 ## Features 💻
 - User registration and authentication using OAuth2.
 - Create, read, update, and delete tasks.
-- Assign attributes like title, description, priority, deadline, and status to each task.
+- Assign the attributes title, description, priority, deadline, and status to each task.
 - Secure API endpoints with token-based authentication.
-- Detailed API documentation for easy integration.
 
 ## Project Demonstration 🖥️
 TODO
@@ -70,10 +75,12 @@ This is the list of the API routes and the expected JSONs.
 ​
 | Route                 | Description                                          
 |----------------------|-----------------------------------------------------
-| <kbd>POST /register</kbd>     | register users (username and password) [response details](#register-user)
-| <kbd>POST /o/token</kbd>     | requests an access token for the user [request details](#request-token)
+| <kbd>POST /register/</kbd>     | register users (username and password) [response details](#register-user)
+| <kbd>POST /o/token/</kbd>     | requests an access token for a specific user [request details](#request-token)
+| <kbd>POST /api/tasks/</kbd>     | creates a new task for a specifir user [response details](#post-task)
+| <kbd>GET /api/tasks/</kbd>     | gets all the tasks of a specific user [response details](#get-tasks)
 
-<h3 id="register-user">POST /register</h3>
+<h3 id="register-user">POST /register/</h3>
 
 **RESPONSE**
 ```json
@@ -82,17 +89,18 @@ This is the list of the API routes and the expected JSONs.
 }
 ```
 
-<h3 id="request-token">POST /o/token</h3>
+<h3 id="request-token">POST /o/token/</h3>
 
 **REQUEST**
+***Data***
 ```json
 {
-    "grant_type": "password",
-    "username": "your-username",
-    "password": "your-password",
-    "client_id": "your-client-id",
-    "client_secret": "your-client-secret"
-    }
+  "grant_type": "password",
+  "username": "your-username-here",
+  "password": "your-password-here",
+  "client_id": "your-client-id-here",
+  "client_secret": "your-client-secret-here"
+}
 ```
 
 **RESPONSE**
@@ -104,6 +112,62 @@ This is the list of the API routes and the expected JSONs.
   "scope": "read write", 
   "refresh_token": "QY8MHHiNaK7JzsXqzuo5YKt3dBckjI"
 }
+```
+
+<h3 id="post-tasks">POST /api/tasks/</h3>
+
+**REQUEST:**
+
+***Headers***
+```json
+{
+  "Authorization': f'Bearer your-access-token-here"
+}
+```
+
+***Data***
+```json
+{
+  "title": "New Task",
+  "description": "This is another task",
+  "priority": "Low",
+  "deadline": "2021-12-31",
+  "status": "Pending",
+}
+```
+
+**RESPONSE**
+```json
+{
+  "id": 2,
+  "title": "New Task",
+  "description": "This is another task",
+  "priority": "Low",
+  "deadline": "2021-12-31",
+  "status": "Pending",
+  "created_at": "2025-02-15T11:49:44.762223Z",
+  "updated_at": "2025-02-15T11:49:44.762251Z",
+  "user": 4
+}
+```
+
+<h3 id="get-tasks">GET /api/tasks/</h3>
+
+**REQUEST:**
+
+***Headers***
+```json
+{
+  "Authorization': f'Bearer your-access-token-here"
+}
+```
+
+**RESPONSE**
+```json
+[  
+  {"id": 1, "title": "New Task", "description": "This is a new task", "priority": "Low", "deadline": "2021-12-31", "status": "Pending", "created_at": "2025-02-15T11:44:35.155255Z", "updated_at": "2025-02-15T11:44:35.155284Z", "user": 4},
+  {"id": 2, "title": "New Task", "description": "This is another task", "priority": "Low", "deadline": "2021-12-31", "status": "Pending", "created_at": "2025-02-15T11:49:44.762223Z", "updated_at": "2025-02-15T11:49:44.762251Z", "user": 4}
+]
 ```
 
 ## Setup ⚙️
