@@ -32,8 +32,7 @@ def obtain_token(username, password):
         'client_secret': os.getenv('CLIENT_SECRET')
     }
     response = requests.post(url, data=data)
-    print('Obtain Token Response:', response.json())
-    return response.json()
+    return response
 
 # Get tasks
 def get_tasks(access_token):
@@ -42,7 +41,6 @@ def get_tasks(access_token):
         'Authorization': f'Bearer {access_token}'
     }
     response = requests.get(url, headers=headers)
-    print('Get Tasks Response:', response.json())
     return response
 
 # Create a new task
@@ -60,7 +58,6 @@ def post_task(access_token, data_dict):
         'status': data_dict['status']
     }
     response = requests.post(url, headers=headers, json=data)
-    print('Post Task Response:', response.json())
     return response
 
 # Update an existing task
@@ -78,7 +75,6 @@ def put_task(access_token, task_id, data_dict):
         'status': data_dict['status']
     }
     response = requests.put(url, headers=headers, json=data)
-    print('Put Task Response:', response.json())
     return response
 
 # Delete a task
@@ -88,5 +84,4 @@ def delete_task(access_token, task_id):
         'Authorization': f'Bearer {access_token}'
     }
     response = requests.delete(url, headers=headers)
-    print('Delete Task Response:', response.json() if response.content else {"message": "Task deleted successfully"})
     return response
