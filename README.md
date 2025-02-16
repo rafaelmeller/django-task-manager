@@ -29,13 +29,21 @@ _Other versions:_
 </p>
 
 ## About ℹ️
-The Task Manager API is a Django-based application designed to help users manage their tasks efficiently. It provides endpoints for creating, reading, updating, and deleting tasks, as well as user registration and authentication. The API supports OAuth2 for secure authentication and authorization.
+This project is a **personal learning exercise** focused on **building a Django REST API** while applying best practices like **pagination, filtering, searching, and OAuth authentication**.
+
+The API allows users to **manage tasks**, including:
+- Creating, updating, retrieving, and deleting tasks.
+- Filtering tasks by priority, status, and deadline.
+- Searching tasks by title or description.
+- Authenticating users using **OAuth2 token-based authentication**.
+
+Additionally, a helper script (`helper_functions.py`, inside the script_examples directory) provides **examples of API interactions via Python**, demonstrating how to make authenticated requests for querying and managing tasks programmatically.
 
 ## Features 💻
-- User registration and authentication using OAuth2.
-- Create, read, update, and delete tasks.
-- Assign the attributes title, description, priority, deadline, and status to each task.
-- Secure API endpoints with token-based authentication.
+- **OAuth2 authentication**: Secure access to the API using token-based authentication.
+- **Task management endpoints**: Supports full CRUD operations (Create, Read, Update, Delete).
+- **Filtering & Searching**: Query tasks based on priority, status, deadline, and text search.
+- **Pagination**: Ensures efficient handling of large datasets.
 
 ## Project Demonstration 🖥️
 TODO
@@ -48,7 +56,7 @@ The Task Manager API is built using Django and Django REST framework. The applic
 - **Serializers**: Convert model instances to JSON format and validate incoming data.
 - **Views**: Handle the business logic and interact with the models and serializers. The main views include task creation, retrieval, update, and deletion, as well as user registration.
 - **URLs**: Route incoming HTTP requests to the appropriate views.
-- **Authentication**: Uses OAuth2 for secure authentication and authorization. The `AccessToken` model is used to manage tokens.
+- **Authentication**: Uses OAuth2 for secure authentication and authorization.
 
 ### Data Flow
 
@@ -56,29 +64,21 @@ The Task Manager API is built using Django and Django REST framework. The applic
 2. **Authentication**: Users obtain an access token by providing their credentials.
 3. **Task Management**: Authenticated users can create, read, update, and delete tasks.
 
-### Database Design
-
-- **User**: Standard Django user model for authentication.
-- **Task**: Model to store task details, including title, description, priority, deadline, status, and user association.
-
-### Main Modules
-
-- **tasks/models.py**: Defines the `Task` model.
-- **tasks/serializers.py**: Defines the `TaskSerializer`.
-- **tasks/views.py**: Contains views for task management and user registration.
-- **tasks/urls.py**: Routes for task-related endpoints.
-- **task_manager/urls.py**: Main URL configuration, including authentication routes.
-
 ## API Endpoints 📍
 
 This is the list of the API routes and the expected JSONs.
 ​
 | Route                 | Description                                          
 |----------------------|-----------------------------------------------------
-| <kbd>POST /register/</kbd>     | register users (username and password) [response details](#register-user)
-| <kbd>POST /o/token/</kbd>     | requests an access token for a specific user [request details](#request-token)
-| <kbd>POST /api/tasks/</kbd>     | creates a new task for a specifir user [response details](#post-task)
-| <kbd>GET /api/tasks/</kbd>     | gets all the tasks of a specific user [response details](#get-tasks)
+| <kbd>POST /register/</kbd>     | register users (username and password) [details](#register-user)
+| <kbd>POST /o/token/</kbd>     | requests an access token for a user [details](#request-token)
+| <kbd>POST /api/tasks/</kbd>     | creates a new task for a user [details](#post-task)
+| <kbd>GET /api/tasks/</kbd>     | gets all the tasks from a user [details](#get-tasks)
+| <kbd>GET /api/tasks/?param=value</kbd>     | filters tasks with a specific parameter from a user [details](#filter-tasks)
+| <kbd>GET /api/tasks/{id}/</kbd>     | gets a task with a specific id from a specific user [details](#get-task-id)
+| <kbd>PUT /api/tasks/{id}/</kbd>     | updates a task with a specific id from a specific user [details](#put-task)
+| <kbd>DELETE /api/tasks/{id}/</kbd>     | deletes a task with a specific id from a specific user [details](#delete-task)
+
 
 <h3 id="register-user">POST /register/</h3>
 
@@ -121,7 +121,7 @@ This is the list of the API routes and the expected JSONs.
 ***Headers***
 ```json
 {
-  "Authorization': f'Bearer your-access-token-here"
+  "Authorization": "Bearer your-access-token-here"
 }
 ```
 
@@ -158,21 +158,116 @@ This is the list of the API routes and the expected JSONs.
 ***Headers***
 ```json
 {
-  "Authorization': f'Bearer your-access-token-here"
+  "Authorization": "Bearer your-access-token-here"
 }
 ```
 
 **RESPONSE**
 ```json
-[  
-  {"id": 1, "title": "New Task", "description": "This is a new task", "priority": "Low", "deadline": "2021-12-31", "status": "Pending", "created_at": "2025-02-15T11:44:35.155255Z", "updated_at": "2025-02-15T11:44:35.155284Z", "user": 4},
-  {"id": 2, "title": "New Task", "description": "This is another task", "priority": "Low", "deadline": "2021-12-31", "status": "Pending", "created_at": "2025-02-15T11:49:44.762223Z", "updated_at": "2025-02-15T11:49:44.762251Z", "user": 4}
-]
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1,
+      "title": "New Task",
+      "description": "This is a new task",
+      "priority": "Low",
+      "deadline": "2021-12-31",
+      "status": "Pending",
+      "created_at": "2025-02-15T11:44:35.155255Z",
+      "updated_at": "2025-02-15T11:44:35.155284Z",
+      "user": 2
+    },
+    {
+      "id": 2,
+      "title": "New Task",
+      "description": "This is another task",
+      "priority": "Low",
+      "deadline": "2021-12-31",
+      "status": "Pending",
+      "created_at": "2025-02-15T11:49:44.762223Z",
+      "updated_at": "2025-02-15T11:49:44.762251Z",
+      "user": 2
+    },
+    {
+      "id": 3,
+      "title": "New Task",
+      "description": "This is another new task",
+      "priority": "High",
+      "deadline": "2021-12-31",
+      "status": "Pending",
+      "created_at": "2025-02-16T11:17:00.685599Z",
+      "updated_at": "2025-02-16T11:17:00.685657Z",
+      "user": 2
+    }
+  ]
+}
+```
+<h3 id="filter-tasks">GET /api/tasks/?param=value</h3>
+
+**REQUEST:**
+
+***Headers***
+```json
+{
+  "Authorization": "Bearer your-access-token-here"
+}
 ```
 
+**Query Parameters**
+| Parameter          | Type                 | Description                                          
+|-----------|---------------|--------------------------------------
+search | str | Search for tasks by title or description
+priority | str | Filter by priority (Low, Medium, High)
+status | str | Filter by status (Pending, Completed)
+deadline | date |	Filter tasks by deadline (YYYY-MM-DD format)
+
+**Request URL examples:**
+
+#### ```GET /api/tasks/?search=payment```
+#### ```GET /api/tasks/?priority=High```
+#### ```GET /api/tasks/?status=Pending```
+#### ```GET /api/tasks/?deadline=2025-05-01```
+#### ```GET /api/tasks/?priority=High&status=Pending&deadline=2025-05-01```
+
+
+
+
+
+#### Note: All parameters are optional—you can provide one, multiple, or none at all.
+
+
 ## Setup ⚙️
+
+To run the project locally:
+
 ```bash
-python3 exemplo.py
+# Clone the repository
+git clone <repo-url>
+
+# Navigate to project folder
+cd task_manager
+
+# Create a virtual environment
+python3 -m venv .venv
+
+# Activate virtual environment
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate     # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Apply database migrations to create necessary tables
+python manage.py migrate
+
+# (Optional) Create a superuser to access the Django admin panel
+python manage.py createsuperuser
+
+# Run the development server
+python manage.py runserver
 ```
 
 ## Author 👨🏻‍💻
