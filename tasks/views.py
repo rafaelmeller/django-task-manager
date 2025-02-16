@@ -6,6 +6,11 @@ from .serializers import TaskSerializer
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from .models import Task
+from .serializers import TaskSerializer
+from rest_framework import generics
 
 # View to list all tasks or create a new task
 class TaskListCreate(generics.ListCreateAPIView):
@@ -49,3 +54,14 @@ class UserRegistrationView(generics.CreateAPIView):
             user = User.objects.create_user(username=username, password=password)
             return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
         return Response({"error": "Username and password are required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+class TaskListCreate(generics.ListCreateAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['priority', 'status', 'deadline']  # Allows filtering by priority & status
+    search_fields = ['title', 'description']  # Enables searching by keywords
+
+class TaskRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
