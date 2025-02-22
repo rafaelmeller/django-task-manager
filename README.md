@@ -1,6 +1,5 @@
 <h1 align="center" style="font-weight: bold;">Task Manager API</h1>
 
-<h4 align="center"> IMPORTANT: This README is still being developed and may contain incomplete or inaccurate information.</h4>
 
 <div align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white&style=for-the-badge" alt="Python Badge">
@@ -14,15 +13,15 @@ _Other versions:_
 [_Clique aqui para Português_](./translations/README-ptBR.md) - TODO
 
 <h4 align="center"> 
-     Status: In development 🚧
+     Status: Complete
 </h4>
 
 <p align="center">
  <a href="#about-ℹ️">About</a> •
  <a href="#features-💻">Features</a> •
- <a href="#project-demonstration-🖥️">Demonstration</a> •
  <a href="#application-architecture-🏗️">Application Architecture</a> •
  <a href="#api-endpoints-📍">API Endpoints</a> •
+ <a href="#usage-examples-🖥️">Usage Examples</a> •
  <a href="#setup-⚙️">Setup</a>  • 
  <a href="#author-👨🏻‍💻">Author</a> • 
  <a href="#license-📝">License</a>
@@ -37,7 +36,9 @@ The API allows users to **manage tasks**, including:
 - Searching tasks by title or description.
 - Authenticating users using **OAuth2 token-based authentication**.
 
-Additionally, a helper script (`helper_functions.py`, inside the script_examples directory) provides **examples of API interactions via Python**, demonstrating how to make authenticated requests for querying and managing tasks programmatically.
+Additionally, a helper script (`helper_functions.py`, inside the `script_examples` directory) provides **examples of API interactions via Python**, demonstrating how to make authenticated requests for querying and managing tasks programmatically.
+
+#
 
 ## Features 💻
 - **OAuth2 authentication**: Secure access to the API using token-based authentication.
@@ -45,8 +46,7 @@ Additionally, a helper script (`helper_functions.py`, inside the script_examples
 - **Filtering & Searching**: Query tasks based on priority, status, deadline, and text search.
 - **Pagination**: Ensures efficient handling of large datasets.
 
-## Project Demonstration 🖥️
-TODO
+#
 
 ## Application Architecture 🏗️
 
@@ -64,6 +64,8 @@ The Task Manager API is built using Django and Django REST framework. The applic
 2. **Authentication**: Users obtain an access token by providing their credentials.
 3. **Task Management**: Authenticated users can create, read, update, and delete tasks.
 
+#
+
 ## API Endpoints 📍
 
 This is the list of the API routes and the expected JSONs.
@@ -79,19 +81,31 @@ This is the list of the API routes and the expected JSONs.
 | <kbd>PUT /api/tasks/{id}/</kbd>     | updates a task with a specific id from a specific user [details](#put-task)
 | <kbd>DELETE /api/tasks/{id}/</kbd>     | deletes a task with a specific id from a specific user [details](#delete-task)
 
+#
 
 <h3 id="register-user">POST /register/</h3>
 
-**RESPONSE**
+**REQUEST:**
+
+***Data***
 ```json
 {
-  TODO,
+  "username": "desired-username-here",
+  "password": "desired-password-here"
 }
 ```
 
+**RESPONSE (201):**
+```json
+{"message": "User created successfully"}
+```
+
+#
+
 <h3 id="request-token">POST /o/token/</h3>
 
-**REQUEST**
+**REQUEST:**
+
 ***Data***
 ```json
 {
@@ -103,7 +117,7 @@ This is the list of the API routes and the expected JSONs.
 }
 ```
 
-**RESPONSE**
+**RESPONSE (201):**
 ```json
 {
   "access_token": "9Lcvhiy108thwJzjTSdyisWMv06XsM", 
@@ -114,9 +128,11 @@ This is the list of the API routes and the expected JSONs.
 }
 ```
 
-<h3 id="post-tasks">POST /api/tasks/</h3>
+#
 
-**REQUEST:**
+<h3 id="post-task">POST /api/tasks/</h3>
+
+**REQUEST:** <h4 id="post-request"></h4>
 
 ***Headers***
 ```json
@@ -136,7 +152,7 @@ This is the list of the API routes and the expected JSONs.
 }
 ```
 
-**RESPONSE**
+**RESPONSE (200):** <h4 id="post-response"></h4>
 ```json
 {
   "id": 2,
@@ -151,9 +167,11 @@ This is the list of the API routes and the expected JSONs.
 }
 ```
 
+#
+
 <h3 id="get-tasks">GET /api/tasks/</h3>
 
-**REQUEST:**
+**REQUEST:** <h4 id="get-request"></h4>
 
 ***Headers***
 ```json
@@ -162,7 +180,7 @@ This is the list of the API routes and the expected JSONs.
 }
 ```
 
-**RESPONSE**
+**RESPONSE (200):** <h4 id="get-response"></h4>
 ```json
 {
   "count": 3,
@@ -205,6 +223,9 @@ This is the list of the API routes and the expected JSONs.
   ]
 }
 ```
+
+#
+
 <h3 id="filter-tasks">GET /api/tasks/?param=value</h3>
 
 **REQUEST:**
@@ -232,12 +253,61 @@ deadline | date |	Filter tasks by deadline (YYYY-MM-DD format)
 #### ```GET /api/tasks/?deadline=2025-05-01```
 #### ```GET /api/tasks/?priority=High&status=Pending&deadline=2025-05-01```
 
-
-
-
-
 #### Note: All parameters are optional—you can provide one, multiple, or none at all.
 
+**RESPONSE (200):**
+
+Same response pattern shown in [GET](#get-response)
+
+#
+
+<h3 id="get-task-id">GET /api/tasks/{id}/</h3>
+
+**REQUEST:**
+
+Same request pattern as [GET](#get-request)
+
+**RESPONSE(200):**
+
+Same response pattern shown in [POST](#post-response)
+
+#
+
+<h3 id="put-task">PUT /api/tasks/{id}/</h3>
+
+**REQUEST:**
+
+Same request pattern as [POST](#post-request)
+
+**RESPONSE (200):**
+
+Same response pattern shown in [POST](#post-response)
+
+#
+
+<h3 id="delete-task">DELETE /api/tasks/{id}/</h3>
+
+**REQUEST:**
+
+Same request pattern as [GET](#get-request)
+
+**RESPONSE (204):**
+
+There is **no content** in the response.
+
+#
+
+## Usage Examples 🖥️
+
+If you need more practical examples of how to interact with the API using Python scripts, please check the following files inside the `script_examples` directory:
+
+`helper_functions.py` – Contains functions for performing CRUD operations on tasks.
+`example_add_task.py` – Demonstrates how to add tasks using helper_functions.py.
+`example_register.py` – Shows how to register a new user via the API.
+
+These scripts illustrate how to automate and integrate the Task Manager API into other applications.
+
+#
 
 ## Setup ⚙️
 
@@ -245,10 +315,10 @@ To run the project locally:
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/rafaelmeller/django-task-manager.git
 
 # Navigate to project folder
-cd task_manager
+cd django-task-manager
 
 # Create a virtual environment
 python3 -m venv .venv
