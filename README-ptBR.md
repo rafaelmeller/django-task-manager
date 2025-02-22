@@ -8,7 +8,7 @@
 #
 
 _Outras versões:_
-[_Click here for English_](../README.md)
+[_Click here for English_](./README.md)
 
 <h4 align="center"> 
      Status: Completo
@@ -336,6 +336,7 @@ python manage.py createsuperuser
 
 # Inicie o servidor de desenvolvimento
 python manage.py runserver
+```
 
 ## Autor 👨🏻‍💻
 
