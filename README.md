@@ -10,7 +10,7 @@
 #
 
 _Other versions:_
-[_Clique aqui para Português_](./translations/README-ptBR.md) - TODO
+[_Clique aqui para Português_](./README-ptBR.md)
 
 <h4 align="center"> 
      Status: Complete
